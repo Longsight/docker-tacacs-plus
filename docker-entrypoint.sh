@@ -1,13 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 
-TAC_PLUS_BIN=/tacacs/sbin/tac_plus
-CONF_FILE=/etc/tac_plus/tac_plus.cfg
+TAC_PLUS_BIN=/tacacs/sbin/tac_plus-ng
+CONF_FILE=/etc/tac_plus-ng.cfg
 
 # Check configuration file exists
-if [ ! -f /etc/tac_plus/tac_plus.cfg ]; then
+if [[ ! -f "${CONF_FILE}" ]]; then
     echo "No configuration file at ${CONF_FILE}"
     exit 1
 fi
+
+# Make the log directories
+mkdir -p /var/log/tac_plus-ng
 
 # Check configuration file for syntax errors
 ${TAC_PLUS_BIN} -P ${CONF_FILE}
@@ -16,10 +19,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Make the log directories
-mkdir -p /var/log/tac_plus
-
-echo "Starting server..."
+echo "Starting tac_plus-ng server..."
 
 # Start the server
 exec ${TAC_PLUS_BIN} -f ${CONF_FILE}

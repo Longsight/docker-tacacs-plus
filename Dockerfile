@@ -1,36 +1,42 @@
-# Compile tac_plus
-FROM ubuntu:20.04 as build
+# Compile tac_plus-ng
+FROM ubuntu:24.04 AS build
 
-LABEL Name=tac_plus
-LABEL Version=1.3.0
+LABEL Name=tac_plus-ng
+LABEL Version=1.4.0
 
 ARG SRC_VERSION
 ARG SRC_HASH
 
-ADD https://github.com/lfkeitel/event-driven-servers/archive/refs/tags/$SRC_VERSION.tar.gz /tac_plus.tar.gz
+ADD https://github.com/Longsight/event-driven-servers/archive/refs/tags/$SRC_VERSION.tar.gz /tac_plus-ng.tar.gz
 
-RUN echo "${SRC_HASH}  /tac_plus.tar.gz" | sha256sum -c -
+RUN echo "${SRC_HASH}  /tac_plus-ng.tar.gz" | sha256sum -c -
 
 RUN apt update && \
-    apt install -y gcc libc6-dev make bzip2 libdigest-md5-perl libnet-ldap-perl libio-socket-ssl-perl && \
-    tar -xzf /tac_plus.tar.gz && \
+    apt install -y gcc make perl libldap2-dev bzip2 libdigest-md5-perl libnet-ldap-perl libio-socket-ssl-perl \
+      libssl-dev libc-ares-dev libpam0g-dev libpcre2-dev libsctp-dev zlib1g-dev libcurl4-gnutls-dev && \
+    tar -xzf /tac_plus-ng.tar.gz && \
     cd /event-driven-servers-$SRC_VERSION && \
     ./configure --prefix=/tacacs && \
     make && \
     make install
 
 # Move to a clean, small image
-FROM ubuntu:20.04
+FROM ubuntu:24.04
 
-LABEL maintainer="Lee Keitel <lfkeitel@usi.edu>"
+LABEL maintainer="Platform Infrastructure <sysadmins@vitrifi.net>>"
 
 COPY --from=build /tacacs /tacacs
-COPY tac_plus.sample.cfg /etc/tac_plus/tac_plus.cfg
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
+RUN mkdir -p /usr/local/share/ca-certificates/ipa
+COPY cacert.pem /usr/local/share/ca-certificates/ipa/ipa.crt
+
 RUN apt update && \
-    apt install -y libdigest-md5-perl libnet-ldap-perl  libio-socket-ssl-perl && \
-    rm -rf /var/cache/apt/*
+    apt install -y perl libldap2-dev bzip2 libdigest-md5-perl libnet-ldap-perl libio-socket-ssl-perl \
+      libssl-dev libc-ares-dev libpam0g-dev libpcre2-dev libsctp-dev zlib1g-dev libcurl4-gnutls-dev && \
+    rm -rf /var/cache/apt/* && \
+    update-ca-certificates --fresh
+
 
 EXPOSE 49
 
