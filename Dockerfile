@@ -11,6 +11,7 @@ ADD https://github.com/Longsight/event-driven-servers/archive/refs/tags/$SRC_VER
 
 RUN echo "${SRC_HASH}  /tac_plus-ng.tar.gz" | sha256sum -c -
 
+COPY ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources
 RUN apt update && \
     apt install -y gcc make perl libldap2-dev bzip2 libdigest-md5-perl libnet-ldap-perl libio-socket-ssl-perl \
       libssl-dev libc-ares-dev libpam0g-dev libpcre2-dev libsctp-dev zlib1g-dev libcurl4-gnutls-dev && \
@@ -31,6 +32,7 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN mkdir -p /usr/local/share/ca-certificates/ipa
 COPY cacert.pem /usr/local/share/ca-certificates/ipa/ipa.crt
 
+COPY ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources
 RUN apt update && \
     apt install -y perl libldap2-dev bzip2 libdigest-md5-perl libnet-ldap-perl libio-socket-ssl-perl \
       libssl-dev libc-ares-dev libpam0g-dev libpcre2-dev libsctp-dev zlib1g-dev libcurl4-gnutls-dev && \
