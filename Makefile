@@ -1,6 +1,6 @@
 VERSION?=2025052301
 SHA256?=0214eae2934ebe0820a6f051df2f8ae57e45dfc6be70a4bb22f5b22134b4b065
-DOCKER_HUB_NAME?='vitrifi/tacacs_plus'
+DOCKER_HUB_NAME?='harbor.svc.vitrifi.io/vitrifi/platform/tac_plus-ng'
 
 .PHONY: ubuntu tag
 
