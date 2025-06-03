@@ -2,7 +2,7 @@
 FROM ubuntu:24.04 AS build
 
 LABEL Name=tac_plus-ng
-LABEL Version=1.4.0
+LABEL Version=1.4.1
 
 ARG SRC_VERSION
 ARG SRC_HASH
@@ -13,6 +13,7 @@ RUN echo "${SRC_HASH}  /tac_plus-ng.tar.gz" | sha256sum -c -
 
 COPY ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources
 RUN apt update && \
+    apt upgrade -y && \
     apt install -y gcc make perl libldap2-dev bzip2 libdigest-md5-perl libnet-ldap-perl libio-socket-ssl-perl \
       libssl-dev libc-ares-dev libpam0g-dev libpcre2-dev libsctp-dev zlib1g-dev libcurl4-gnutls-dev && \
     tar -xzf /tac_plus-ng.tar.gz && \
@@ -34,6 +35,7 @@ COPY cacert.pem /usr/local/share/ca-certificates/ipa/ipa.crt
 
 COPY ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources
 RUN apt update && \
+    apt upgrade -y && \
     apt install -y perl libldap2-dev bzip2 libdigest-md5-perl libnet-ldap-perl libio-socket-ssl-perl \
       libssl-dev libc-ares-dev libpam0g-dev libpcre2-dev libsctp-dev zlib1g-dev libcurl4-gnutls-dev && \
     rm -rf /var/cache/apt/* && \

@@ -6,12 +6,6 @@ DOCKER_HUB_NAME?='vitrifi/tacacs_plus'
 
 all: alpine ubuntu
 
-alpine:
-	docker build -t tac_plus-ng:alpine \
-		--build-arg SRC_VERSION=$(VERSION) \
-		--build-arg SRC_HASH=$(SHA256) \
-		-f alpine.Dockerfile .
-
 ubuntu:
 	docker build -t tac_plus-ng:ubuntu \
 		--build-arg SRC_VERSION=$(VERSION) \
@@ -22,6 +16,3 @@ tag:
 	docker tag tac_plus-ng:ubuntu $(DOCKER_HUB_NAME):latest
 	docker tag tac_plus-ng:ubuntu $(DOCKER_HUB_NAME):ubuntu
 	docker tag tac_plus-ng:ubuntu $(DOCKER_HUB_NAME):ubuntu-$(VERSION)
-
-	docker tag tac_plus-ng:alpine $(DOCKER_HUB_NAME):alpine
-	docker tag tac_plus-ng:alpine $(DOCKER_HUB_NAME):alpine-$(VERSION)
