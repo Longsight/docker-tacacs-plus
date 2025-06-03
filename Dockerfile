@@ -11,8 +11,12 @@ ADD https://github.com/Longsight/event-driven-servers/archive/refs/tags/$SRC_VER
 
 RUN echo "${SRC_HASH}  /tac_plus-ng.tar.gz" | sha256sum -c -
 
+RUN mkdir -p /usr/local/share/ca-certificates/ipa
+COPY cacert.pem /usr/local/share/ca-certificates/ipa/ipa.crt
+
 COPY ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources
-RUN apt update && \
+RUN update-ca-certificates --fresh && \
+    apt update && \
     apt upgrade -y && \
     apt install -y gcc make perl libldap2-dev bzip2 libdigest-md5-perl libnet-ldap-perl libio-socket-ssl-perl \
       libssl-dev libc-ares-dev libpam0g-dev libpcre2-dev libsctp-dev zlib1g-dev libcurl4-gnutls-dev && \
@@ -34,12 +38,12 @@ RUN mkdir -p /usr/local/share/ca-certificates/ipa
 COPY cacert.pem /usr/local/share/ca-certificates/ipa/ipa.crt
 
 COPY ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources
-RUN apt update && \
+RUN update-ca-certificates --fresh && \
+    apt update && \
     apt upgrade -y && \
     apt install -y perl libldap2-dev bzip2 libdigest-md5-perl libnet-ldap-perl libio-socket-ssl-perl \
       libssl-dev libc-ares-dev libpam0g-dev libpcre2-dev libsctp-dev zlib1g-dev libcurl4-gnutls-dev && \
-    rm -rf /var/cache/apt/* && \
-    update-ca-certificates --fresh
+    rm -rf /var/cache/apt/*
 
 
 EXPOSE 49
