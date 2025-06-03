@@ -35,6 +35,7 @@ RUN apt update && \
     apt upgrade -y && \
     apt install -y perl libldap2-dev bzip2 libdigest-md5-perl libnet-ldap-perl libio-socket-ssl-perl \
       libssl-dev libc-ares-dev libpam0g-dev libpcre2-dev libsctp-dev zlib1g-dev libcurl4-gnutls-dev && \
+    apt autoremove -y && \
     rm -rf /var/cache/apt/*
 
 
