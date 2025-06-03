@@ -3,6 +3,10 @@
 TAC_PLUS_BIN=/tacacs/sbin/tac_plus-ng
 CONF_FILE=/etc/tac_plus-ng.cfg
 
+if [[ -f "/run/secrets/tac_plus-ng.cfg" ]]; then
+    CONF_FILE=/run/secrets/tac_plus-ng.cfg
+fi
+
 # Check configuration file exists
 if [[ ! -f "${CONF_FILE}" ]]; then
     echo "No configuration file at ${CONF_FILE}"

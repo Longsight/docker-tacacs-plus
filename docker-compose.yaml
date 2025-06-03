@@ -1,0 +1,13 @@
+name: tac_plus-ng
+
+services:
+  tacacs:
+    image: harbor.svc.vitrifi.io/vitrifi/platform/tac_plus-ng:latest
+    ports:
+      - '49:49'
+    secrets:
+      - tac_plus-ng.cfg
+
+secrets:
+  tac_plus-ng.cfg:
+    file: ./tac_plus-ng.cfg
