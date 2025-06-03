@@ -2,9 +2,9 @@ VERSION?=2025052301
 SHA256?=0214eae2934ebe0820a6f051df2f8ae57e45dfc6be70a4bb22f5b22134b4b065
 DOCKER_HUB_NAME?='vitrifi/tacacs_plus'
 
-.PHONY: alpine ubuntu tag
+.PHONY: ubuntu tag
 
-all: alpine ubuntu
+all: ubuntu
 
 ubuntu:
 	docker build -t tac_plus-ng:ubuntu \
